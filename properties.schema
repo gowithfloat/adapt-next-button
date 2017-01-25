@@ -1,0 +1,47 @@
+{
+  "type":"object",
+  "$schema": "http://json-schema.org/draft-04/schema",
+  "id": "http://jsonschema.net",
+  "$ref": "http://localhost/plugins/content/component/model.schema",
+  "properties":{
+    "_supportedLayout": {
+      "type": "string",
+      "required": true,
+      "enum": ["full-width", "half-width", "both"],
+      "default": "both",
+      "editorOnly": true
+    },
+    "_hoverText": {
+      "type": "string",
+      "required": false,
+      "inputType": "Text",
+      "title": "Hover Text",
+      "default": "",
+      "validators": [],
+      "help": "Text to display when the user hovers over the button",
+      "translatable": true
+    },
+    "_requirePageCompletion": {
+      "type": "boolean",
+      "required": true,
+      "inputType": {
+        "type": "Boolean",
+        "options": [true, false]
+      },
+      "title": "Require Page Completion",
+      "default": true,
+      "validators": ["required"],
+      "help": "Require the page to be complete before enabling the next button"
+    },
+    "_nextPage": {
+      "type": "string",
+      "required": false,
+      "inputType": "Text",
+      "title": "Override Next Page ID",
+      "default": "",
+      "validators": [],
+      "help": "Specify the ID of the next page to override the default behavior",
+      "translatable": true
+    }    
+  }
+}

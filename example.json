@@ -1,0 +1,14 @@
+{
+  "_id":"c-30",
+  "_parentId":"b-05",
+  "_type":"component",
+  "_component":"next-button",
+  "_classes":"",
+  "_layout":"left",
+  "title": "Button",
+  "displayTitle": "Button",
+  "label": "Button Label (optional)",
+  "instruction": "Instructions (optional)",
+  "_hoverText": "Text displayed when hovering over the button",
+  "_requirePageCompletion": true
+}
