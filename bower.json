@@ -9,7 +9,7 @@
   "component": "next-button",
   "displayName": "Next Page Button",
   "description": "Provides a button for easily navigating to the next page in an Adapt course",
-  "homepage": "https://github.com/gowithfloat/adapt-next-button"
+  "homepage": "https://github.com/gowithfloat/adapt-next-button",
   "keywords": [
     "adapt-plugin",
     "adapt-component"
