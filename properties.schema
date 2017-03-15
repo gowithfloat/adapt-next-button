@@ -30,7 +30,6 @@
       },
       "title": "Require Page Completion",
       "default": true,
-      "validators": ["required"],
       "help": "Require the page to be complete before enabling the next button"
     },
     "_nextPage": {
