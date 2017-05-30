@@ -17,6 +17,8 @@ Settings
 
 **_requirePageCompletion (boolean, default=true):** By default, the next button is disabled until the rest of the page is complete. However, you can set the next button to always be enabled by setting this to `false`.
 
+**_skipMenus (boolean, default=true):** By default, clicking the next button will take the user to the next *page*. However, disabling this setting would take the user to whatever the next content object is: either page or menu.
+
 **_nextPage (string, optional)**: This component automatically determines the next page based on the structure of the course. However, if you want to explicitly set the next page, you can set the ID of the page here.
 
 Limitations

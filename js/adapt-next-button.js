@@ -1,46 +1,70 @@
 define([
-  "coreJS/adapt",
-  "coreViews/componentView",
-  "./get-next-page"
-], function(Adapt, ComponentView, getNextPage) {
-  var NextButton = ComponentView.extend({
-    preRender: function() {
-      var page = this.model.findAncestor();
-      page.on("change:_isComplete", _.bind(this.onPageCompletionUpdate, this));
+    "coreJS/adapt",
+    "coreViews/componentView",
+    "./next"
+], function(Adapt, ComponentView, getNextContentObject) {
+    var NextButton = ComponentView.extend({
+        events: {
+            'click button' : 'onClickNextButton'
+        },
 
-      if (!this.model.has("_requirePageCompletion")) {
-        this.model.set("_requirePageCompletion", true);
-      }
+        initialize: function () {
+            // Assume that page completion is required if this value is not specified
+            var requiresPageCompletion = this.model.get("_requirePageCompletion") !== false;
+            if (requiresPageCompletion) {
+                this.model.set("_isComplete", true);
+                var page = this.model.findAncestor();
+                page.on("change:_isComplete", _.bind(this.onPageCompletionUpdate, this));
+                this.onPageCompletionUpdate(page);
+            }
 
-      if (!this.model.has("_nextPage") || this.model.get("_nextPage").length === 0) {
-        var nextPage = getNextPage(page);
-        if (nextPage) {
-          this.model.set("_nextPage", nextPage.get("_id"));
+            this.render();
+
+            var view = this;
+            this.model.on("change:_isEnabled", function(component) {
+                view.$(".button-widget button").attr("disabled", !component.get("_isEnabled"));
+            });
+        },
+
+        postRender: function() {
+            this.setReadyStatus();
+
+            if (this.model.get("_isVisible")) {
+                this.setCompletionStatus();
+            } else {
+                this.model.on("change:_isVisible", this.setCompletionStatus, this);
+            }
+        },
+
+        /**
+         * Invoked when the next button is clicked.
+         */
+        onClickNextButton: function() {
+            
+            var nextPageId = this.model.get("_nextPage");
+            if (!nextPageId || !nextPageId.length) {
+                var currentPage = this.model.findAncestor();
+                var next = getNextContentObject(currentPage, this.model.get("_skipMenus") !== false);
+                nextPageId = next && next.get("_id");
+            }
+
+            if (nextPageId) {
+                Backbone.history.navigate('#/id/' + nextPageId, {trigger: true});
+            }
+        },
+
+        /**
+         * Invoked when a change is detected in the page's completion status.
+         * 
+         * @param  {Model}  The page where the _isComplete attribute has changed.
+         */
+        onPageCompletionUpdate: function(page) {
+            var isComplete = !page || page.get("_isComplete") === true;
+            this.model.set("_isEnabled", isComplete);
         }
-      }
-    },
+    });
 
-    postRender: function() {
-      this.setReadyStatus();
+    Adapt.register('next-button', NextButton);
 
-      // In case the next button is not marked as optional,
-      // mark it complete right away so that the button is waiting
-      // on itself to become complete.
-      this.setCompletionStatus();
-    },
-
-    /**
-     * Invoked when a change is detected in the page's completion status.
-     * 
-     * @param  {Model}  The page where the _isComplete attribute has changed.
-     */
-    onPageCompletionUpdate: function(page) {
-      var isIncomplete = !page || page.get("_isComplete") === false;
-      this.$(".button-widget button").attr("disabled", isIncomplete);
-    }
-  });
-
-  Adapt.register('next-button', NextButton);
-
-  return NextButton;
+    return NextButton;
 });
